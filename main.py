@@ -4,8 +4,34 @@ from mcp.server.fastmcp import FastMCP
 from reapy import reascript_api as RPR
 from helper import *
 
+sample_library_path = "D:\\sample-library\\"
 
-mcp = FastMCP("ReaperMCPServer")
+INSTRUCTIONS = f"""
+STRICTLY FOLLOW THESE INSTRUCTIONS:
+
+1. SAMPLE LIBRARY ACCESS:
+   - Root path: "{sample_library_path}"
+   - ONLY access and explore subfolders within this root path
+   - NEVER attempt to access or explore folders outside this path
+   - Treat this as a secure sandbox environment
+
+2. EXPLORATION GUIDELINES:
+   - The sample library is extensive - use iterative exploration
+   - Start with high-level folder structure before diving deeper
+   - Only explore folders that are relevant to the current task
+   - Avoid unnecessary deep traversal of the entire library
+   - Explore ONE LEVEL AT A TIME:
+     * First, list contents of current directory
+     * Use descriptive file/folder names to decide what to explore next
+     * Only proceed to next level when specifically needed
+   - File names are descriptive and will help guide exploration:
+     * Use file names to understand content without opening
+     * Look for patterns in naming conventions
+     * Use descriptive names to identify relevant sections
+     * Avoid exploring sections with clearly irrelevant names
+"""
+
+mcp = FastMCP(name="ReaperMCPServer", instructions=INSTRUCTIONS)
 
 prj = reapy.Project()
 if prj:
@@ -93,3 +119,6 @@ def delete_item(track_index : int, item_index : int) -> None:
 def delete_fx_on_track(track_index : int, fx_index : int) -> None:
     prj.tracks[track_index].fxs[fx_index].delete()
 
+@mcp.tool(name="explore_sample_library", description="Explore the sample library and return a hierarchical list of samples/folders at the given path. provide the path relative to the root path to sample library")
+def explore_sample_library(path : str) -> list:
+    return get_list_of_samples_in_library(sample_library_path, path)

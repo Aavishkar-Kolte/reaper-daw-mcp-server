@@ -1,4 +1,5 @@
 import reapy
+import os
 
 def get_notes(list: reapy.NoteList) -> list:
     return [{"id": note.id, 
@@ -33,3 +34,30 @@ def get_tracks(reaper_prj: reapy.Project) -> list:
              "color": track.color,
              "number_of_items": track.n_items,
              "items": get_items(track)} for track in reaper_prj.tracks]
+
+def get_list_of_samples_in_library(root_dir : str, path : str) -> list:
+    full_path = os.path.join(root_dir, path)
+    tree_str = ""
+    
+    try:
+        items = os.listdir(full_path)
+        dirs = []
+        files = []
+        for item in items:
+            item_path = os.path.join(full_path, item)
+            if os.path.isdir(item_path):
+                dirs.append(item)
+            else:
+                files.append(item)
+        tree_str += f"{path}/\n"
+
+        for d in dirs:
+            tree_str += f"    {d}/\n"
+
+        for f in files:
+            tree_str += f"    {f}\n"
+            
+    except Exception as e:
+        tree_str = f"Error accessing directory: {e}"
+        
+    return tree_str
