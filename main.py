@@ -1,3 +1,4 @@
+import os
 import reapy
 import configparser
 from mcp.server.fastmcp import FastMCP
@@ -29,6 +30,9 @@ STRICTLY FOLLOW THESE INSTRUCTIONS:
      * Look for patterns in naming conventions
      * Use descriptive names to identify relevant sections
      * Avoid exploring sections with clearly irrelevant names
+
+3. SAMPLE INSERTION GUIDELINES:
+   - Drums, Snare, Kick, and Hihat samples should be first explored in sample library then inserted into tracks using the "insert_sample_into_track" tool
 """
 
 mcp = FastMCP(name="ReaperMCPServer", instructions=INSTRUCTIONS)
@@ -122,3 +126,12 @@ def delete_fx_on_track(track_index : int, fx_index : int) -> None:
 @mcp.tool(name="explore_sample_library", description="Explore the sample library and return a hierarchical list of samples/folders at the given path. provide the path relative to the root path to sample library")
 def explore_sample_library(path : str) -> list:
     return get_list_of_samples_in_library(sample_library_path, path)
+
+@mcp.tool(name="insert_sample_into_track", description="Inserts the given sample into the given track in the current reaper project. provide the path relative to the root path to sample library")
+def insert_sample_into_track(track_index : int, sample_path : str, start_time : list[float]) -> None:
+    full_sample_path = os.path.join(sample_library_path, sample_path)
+    absolute_mode = 512 | (track_index << 16)
+    for pos in start_time:
+        prj.cursor_position = pos
+        RPR.InsertMedia(full_sample_path, absolute_mode)
+    prj.cursor_position = 0
