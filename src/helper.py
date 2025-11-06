@@ -16,7 +16,7 @@ def get_takes(item: reapy.Item) -> list:
              "take_name": take.name,
              "number_of_notes": take.n_notes,
              "notes": get_notes(take.notes)
-             } for i, take in item.takes]
+             } for i, take in enumerate(item.takes)]
 
 def get_items(track: reapy.Track) -> list:
     return [{"id": item.id,

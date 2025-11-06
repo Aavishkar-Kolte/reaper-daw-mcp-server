@@ -3,7 +3,7 @@ import reapy
 import configparser
 from mcp.server.fastmcp import FastMCP
 from reapy import reascript_api as RPR
-from helper import *
+from src.helper import *
 
 sample_library_path = "D:\\sample-library\\"
 
@@ -135,3 +135,6 @@ def insert_sample_into_track(track_index : int, sample_path : str, start_time : 
         prj.cursor_position = pos
         RPR.InsertMedia(full_sample_path, absolute_mode)
     prj.cursor_position = 0
+
+if __name__ == "__main__":
+    mcp.run()
